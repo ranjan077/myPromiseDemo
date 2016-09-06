@@ -1,24 +1,27 @@
 function MyPromise () {
-	var success = function() {};
-	var error = function() {};
-	var promise;
-	return {
-		then: function(successCallBack,errorCallback) {
-			promise = new MyPromise(); // Creating new promise for chaning the promises.
-			
-			if (typeof  successCallBack === 'function') {
-				success = successCallBack.bind(promise); // point 'this' to new promise
-			}
-			if (typeof  errorCallback === 'function') {
-				error = errorCallback.bind(promise);
-			}
-			
-			return promise;
-		},
-		resolve: function(param) {
+	var success, error, promise;
+	
+	this.then =  function(successCallBack,errorCallback) {
+		promise = new MyPromise(); // Creating new promise for chaning the promises.
+		
+		if (typeof  successCallBack === 'function') {
+			success = successCallBack.bind(promise); // point 'this' to new promise
+		}
+		if (typeof  errorCallback === 'function') {
+			error = errorCallback.bind(promise);
+		}
+		
+		return promise;
+	}
+
+	this.resolve =  function(param) {
+		if (typeof  success === 'function') {
 			success(param);
-		},
-		reject: function(reason) {
+		}
+	}
+
+	this.reject = function(reason) {
+		if (typeof  error === 'function') {
 			error(reason);
 		}
 	}
